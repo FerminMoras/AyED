@@ -1,7 +1,5 @@
 package Practica2;
 
-
-
 public class BinaryTree <T> {
 	
 	private T data;
@@ -104,23 +102,48 @@ public class BinaryTree <T> {
 	}
 	
     	 
-    public BinaryTree<Integer> espejo(BinaryTree<Integer> arbol1, BinaryTree<Integer> arbol2){
-    	if(arbol1.hasLeftChild()){
-			arbol2.addRightChild(arbol1.leftChild);
-			arbol1.getLeftChild().espejo(arbol1, arbol2);
-		}
-		if(arbol1.hasRightChild()){
-			arbol2.addLeftChild(arbol1.rightChild);
-			arbol1.getRightChild().espejo(arbol1, arbol2);
-		}
+    public BinaryTree<Integer> espejo(BinaryTree<Integer> a1) {
     	
+    	if(a1 == null) {
+    		return null;
+    	}
     	
- 	   return arbol2;
-    }
+    	BinaryTree<Integer> a2 = new BinaryTree<Integer>(a1.getData());
+    	
+    	if(a1.hasLeftChild()) {
+    		a2.addLeftChild(espejo(a1.getRightChild()));
+    	}
+    	
+    	if(a1.hasRightChild()) {
+    		a2.addRightChild(espejo(a1.getLeftChild()));
+    	}
+    
+    	return a2;
+	}
+    	
 
 	// 0<=n<=m
 	public void entreNiveles(int n, int m){
-		
+		BinaryTree<Integer> ab = null;
+		Queue<BinaryTree<Integer>> cola = new Queue<BinaryTree<Integer>>();
+		cola.enqueue(this);
+		cola.enqueue(null);
+			while (!cola.isEmpty()) {
+				ab = cola.dequeue();
+				if (ab != null) {
+					System.out.print(ab.getData());
+					if (ab.hasLeftChild()) {
+						cola.enqueue(ab.getLeftChild());
+					}
+					if (ab.hasRightChild()) {
+						cola.enqueue(ab.getRightChild());
+					}
+				}
+				else if (!cola.isEmpty()) {
+					System.out.println();
+					cola.enqueue(null);
+		   		}
+			}
 	}
 	
 	public static void main(String[] args) {
@@ -135,14 +158,23 @@ public class BinaryTree <T> {
 		a1.addRightChild(hijoder);
 		
 		System.out.println("La cantidad de hojas del arbol es: " + a1.contarHojas());
+		System.out.println("");
 		
-		BinaryTree<Integer> a2 = new BinaryTree<Integer>(a1.getData());
-		a1.espejo(a1, a2);
+		BinaryTree<Integer> a2 = new BinaryTree<Integer>();
+		a2 = a1.espejo(a1);
+		
 		
 		System.out.println("Arbol1:");
 		a1.printPreorden();
+		System.out.println("");
 		System.out.println("Arbol2:");
 		a2.printPreorden();
+		System.out.println("");
+		
+		ContadorArbol c = new ContadorArbol(a1);
+		System.out.println("Ejercicio 3 - Numeros pares recorrido Post Orden: " + c.numerosParesPostOrden());
+		System.out.println("");
+		System.out.println("Ejercicio 3 - Numeros pares recorrido In Orden: " + c.numerosParesInOrden());
 	}
 	
 }
