@@ -1,4 +1,5 @@
 package Practica2;
+import java.util.*;
 
 public class BinaryTree <T> {
 	
@@ -123,27 +124,61 @@ public class BinaryTree <T> {
     	
 
 	// 0<=n<=m
-	public void entreNiveles(int n, int m){
-		BinaryTree<Integer> ab = null;
-		Queue<BinaryTree<Integer>> cola = new Queue<BinaryTree<Integer>>();
-		cola.enqueue(this);
-		cola.enqueue(null);
-			while (!cola.isEmpty()) {
-				ab = cola.dequeue();
-				if (ab != null) {
+	public void porNivel(){
+		Queue<BinaryTree<T>> cola = new LinkedList();
+		cola.offer(this);
+		cola.offer(null); //marca nivel
+			while (!cola.isEmpty()) { //mientras la cola no este vacia
+				BinaryTree<T> ab = cola.poll(); //desencola el primer elemento
+				if (ab != null) { //pregunta si es un elemento tipo arbol o si es null llego al final del nivel
 					System.out.print(ab.getData());
-					if (ab.hasLeftChild()) {
-						cola.enqueue(ab.getLeftChild());
+					if (ab.hasLeftChild()) { //pregunta si tiene hijo izquierdo
+						cola.offer(ab.getLeftChild()); //encola hijo izquierdo
 					}
-					if (ab.hasRightChild()) {
-						cola.enqueue(ab.getRightChild());
+					if (ab.hasRightChild()) { //pregunta si tiene hijo derecho
+						cola.offer(ab.getRightChild()); //encola hijo derecho
 					}
 				}
-				else if (!cola.isEmpty()) {
+				else if (!cola.isEmpty()) { //pregunta si hay elementos en la cola o si esta vacia
 					System.out.println();
-					cola.enqueue(null);
+					cola.offer(null); //encola null para marcar el nivel
 		   		}
 			}
+	}
+	
+	public void entreNiveles(int n, int m){
+		if((n > m) || (n < 0) || (m < 0) ) {
+			System.out.println("Valores de niveles invalidos");
+			return;
+		}
+		
+		Queue<BinaryTree<T>> cola = new LinkedList();
+		cola.offer(this); //agg el nodo raiz a la cola
+		
+		int nivelActual = n;
+		
+		while(nivelActual <= m && !cola.isEmpty()) { //mientras ok sea true, y la cola tenga elementos
+			//System.out.println("Entra al while");
+			int tamaniocola = cola.size(); //obtenemos la cantidad de elementos q hay en la cola
+			
+			for (int i = 0; i < tamaniocola; i++ ) { //procesamos los elementos del nivel actual
+				//System.out.println("Entra al for");
+				BinaryTree<T> arbol = cola.poll(); //se desencola el primer nodo y se almacena en el arbol
+				System.out.println("Nivel: " + nivelActual);
+				System.out.println(arbol.getData()); //imprimimos los nodos del nivel actual
+				
+				//agregamos los hijos a la cola
+				if(arbol.hasLeftChild()) {
+					cola.offer(arbol.getLeftChild());
+				}
+				
+				if(arbol.hasRightChild()) {
+					cola.offer(arbol.getRightChild());
+				}
+			}
+			nivelActual ++;
+		}
+		
 	}
 	
 	public static void main(String[] args) {
@@ -175,6 +210,9 @@ public class BinaryTree <T> {
 		System.out.println("Ejercicio 3 - Numeros pares recorrido Post Orden: " + c.numerosParesPostOrden());
 		System.out.println("");
 		System.out.println("Ejercicio 3 - Numeros pares recorrido In Orden: " + c.numerosParesInOrden());
+		
+		System.out.println("");
+		a1.entreNiveles(1,3);
 	}
 	
 }
