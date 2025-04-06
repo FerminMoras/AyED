@@ -154,7 +154,7 @@ public class BinaryTree <T> {
 		
 		Queue<BinaryTree<T>> cola = new LinkedList();
 		cola.offer(this); //agg el nodo raiz a la cola
-		
+		cola.offer(null);
 		int nivelActual = n;
 		
 		while(nivelActual <= m && !cola.isEmpty()) { //mientras ok sea true, y la cola tenga elementos
