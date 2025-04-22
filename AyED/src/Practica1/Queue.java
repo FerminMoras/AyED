@@ -1,10 +1,10 @@
 package Practica1;
 import java.util.*;
 
-public class ej8queue extends ej8sequence {
+public class Queue<T> extends Sequence {
 	List<T> data;
 	
-	public ej8queue() {
+	public Queue() {
 		this.data = new LinkedList<T>();
 	}
 	

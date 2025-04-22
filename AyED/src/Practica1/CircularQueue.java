@@ -1,6 +1,6 @@
 package Practica1;
 
-public class ej8circularQueue extends ej8queue {
+public class CircularQueue<T> extends Queue<T> {
 	
 	public T shift() {
         T element = dequeue(); // extraigo el último elemento

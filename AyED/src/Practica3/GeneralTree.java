@@ -2,6 +2,7 @@ package Practica3;
 
 import java.util.LinkedList;
 import java.util.List;
+import Practica1.Queue;
 
 public class GeneralTree<T>{
 
@@ -58,28 +59,85 @@ public class GeneralTree<T>{
 	}
 	
 	public int altura() {
-		
-		if(this.isEmpty()) 
+		if(this.isEmpty())
 			return 0;
-		if(this.isLeaf()) {
-			return 0;
-		}
-		
-		int cant = 0;
+		else
+			return alturaMax();
+	}
 	
-		for (GeneralTree<T> hijo: this.getChildren() ) {
-			cant += altura();
+	private int alturaMax() {
+		if(this.isLeaf())
+			return 0;
+		else {
+			int max = -1;
+			List<GeneralTree<T>> hijos = this.getChildren();
+			for(GeneralTree<T> hijo: hijos) {
+				max = Math.max(max, hijo.alturaMax());
+			}
+			return max + 1; // +1 es por la raiz.
 		}
-		
-		return cant;
 	}
 	
 	public int nivel(T dato){
-		return 0;
+		if(this.isEmpty())
+			return -1;
+		else
+			return obtenerNivel(dato);
 	  }
+	
+	private int obtenerNivel(T dato) {
+		int cont = 0;
+		int act;
+		GeneralTree<T> treeAux;
+		Queue<GeneralTree<T>> cola = new Queue();
+		cola.enqueue(this);
+		while(!cola.isEmpty()) {
+			act = cola.size();
+			for(int i = 0; i < act; i++) {
+				treeAux = cola.dequeue();
+				if(treeAux.getData() == dato) {
+					return cont;
+				}
+				else {
+					for(GeneralTree<T> hijo: treeAux.getChildren()) {
+						cola.enqueue(hijo);
+					}
+				}
+			}
+			cont++;
+		}
+		return -1;
+	}
 
 	public int ancho(){
-		
 		return 0;
+	}
+	
+	public static void main(String args[]) {
+		
+		GeneralTree<Integer> nodo0 = new GeneralTree<Integer>(0);
+		GeneralTree<Integer> nodo1 = new GeneralTree<Integer>(1);
+		GeneralTree<Integer> nodo2 = new GeneralTree<Integer>(2);
+		GeneralTree<Integer> nodo3 = new GeneralTree<Integer>(3);
+		GeneralTree<Integer> nodo21 = new GeneralTree<Integer>(21);
+		GeneralTree<Integer> nodo22 = new GeneralTree<Integer>(22);
+		GeneralTree<Integer> nodo23 = new GeneralTree<Integer>(23);
+		GeneralTree<Integer> nodo30 = new GeneralTree<Integer>(30);
+		GeneralTree<Integer> nodo31 = new GeneralTree<Integer>(31);
+		
+		nodo0.addChild(nodo1);
+		nodo0.addChild(nodo2);
+		nodo0.addChild(nodo3);
+		
+		nodo2.addChild(nodo21);
+		nodo2.addChild(nodo22);
+		nodo2.addChild(nodo23);
+		
+		nodo3.addChild(nodo30);
+		nodo3.addChild(nodo31);
+		
+		System.out.println("El nivel del nodo 21 es: " + nodo0.nivel(7));
+		
+		
 	}
 }

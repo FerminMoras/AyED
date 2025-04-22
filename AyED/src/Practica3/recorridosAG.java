@@ -1,23 +1,22 @@
 package Practica3;
 import java.util.LinkedList;
 import java.util.List;
-import Practica1.ej8queue;
+import Practica1.Queue;
 import Practica3.GeneralTree;
 
 public class recorridosAG {
 	
+	//Recorrido preOrden
+	
 	public static List<Integer> numerosImparesMayoresQuePreOrden (GeneralTree <Integer> a, Integer n) {
 		
 		List<Integer> listaImpares = new LinkedList<Integer>();
-		recorrerPreorden(a,n,listaImpares);
+		if ((a != null) && (!a.isEmpty())) 
+			recorrerPreorden(a,n,listaImpares);
 		return listaImpares;
 	}
 	
 	private static void recorrerPreorden(GeneralTree <Integer> a, Integer n, List<Integer> listaImpares){
-		
-		if(a.isEmpty()) {
-			return;
-		}
 		
 		if ((a.getData() % 2 != 0) && (a.getData() > n)) {
 			listaImpares.add(a.getData());
@@ -34,38 +33,33 @@ public class recorridosAG {
 	 	public static List<Integer> numerosImparesMayoresQuePostOrden (GeneralTree <Integer> a, Integer n) {
 		
 		List<Integer> listaImpares = new LinkedList<Integer>();
-		recorrerPostOrden(a,n,listaImpares);
+		if ((a != null) && (!a.isEmpty()))
+			recorrerPostOrden(a,n,listaImpares);
 		return listaImpares;
 	}
 	
 	private static void recorrerPostOrden(GeneralTree <Integer> a, Integer n, List<Integer> listaImpares){
 		
-		if(a.isEmpty()) {
-			return;
+		for (GeneralTree<Integer> hijo: a.getChildren()) {
+			recorrerPostOrden(hijo,n,listaImpares);
 		}
 		
 		if ((a.getData() % 2 != 0) && (a.getData() > n)) {
 			listaImpares.add(a.getData());
 		}
 		
-		for (GeneralTree<Integer> hijo: a.getChildren()) {
-			recorrerPostOrden(hijo,n,listaImpares);
-		}
 	}
 	 
 	 //Recorrido inOrden
 	 
-	 public List<Integer> numerosImparesMayoresQueInOrden (GeneralTree <Integer> a ,Integer n) {
+	 public static List<Integer> numerosImparesMayoresQueInOrden (GeneralTree <Integer> a ,Integer n) {
 	        List <Integer> listaImpares = new LinkedList<Integer>();
-	       recorrerInOrden(a, n, listaImpares);
+	        if ((a != null) && (!a.isEmpty()))
+	        	recorrerInOrden(a, n, listaImpares);
 	        return listaImpares;
      }
 	
 	 private static void recorrerInOrden(GeneralTree <Integer> a, Integer n, List<Integer> listaImpares){
-		 
-		if(a.isEmpty()) {
-			return;
-		}
 		 
 	 	List<GeneralTree<Integer>> hijo = a.getChildren();
 	 	
@@ -78,35 +72,36 @@ public class recorridosAG {
         }	
         
         for(int i=1; i < hijo.size(); i++) {
-            recorrerInOrden(a,n, listaImpares);
+            recorrerInOrden(hijo.get(i),n, listaImpares);
         }
 	 }
-	 	
 	 
-	/*
-	
-	PREGUNTAR POR COMO IMPLEMENTAR LA QUEUE Y EL INCISO B
+	//Recorrido porNiveles
 	 
-	public List<Integer> numerosImparesMayoresQuePorNiveles(GeneralTree <T> a, Integer n) {
-        List<Integer> result = new LinkedList<Integer>();
-        GeneralTree<T> aux;
-        Queue<GeneralTree<T>> queue = new Queue<GeneralTree<T>>();
-        queue.enqueue(a);
-        while(!queue.isEmpty()) {
-            aux = queue.dequeue();
-            if(!aux.isEmpty()) {
-                int dato = (Integer) this.getData();
-                if(dato %2 != 0 && dato > n) result.add(dato);
-            }
-            List<GeneralTree<T>> children = aux.getChildren();
-            for(GeneralTree<T> child: children) {
-                queue.enqueue(child);
-            }
-        }
-        return result;
+	public static List<Integer> numerosImparesMayoresQuePorNiveles(GeneralTree <Integer> a, Integer n) {
+        List<Integer> listaImpares = new LinkedList<Integer>();
+        if ((a != null) && (!a.isEmpty()))
+        	recorrerPorNiveles(a,n,listaImpares);
+        return listaImpares;
+        
     }
+	
+	private static void recorrerPorNiveles (GeneralTree<Integer> a, int n, List<Integer> listaImpares) {
+		Queue<GeneralTree<Integer>> cola = new Queue<GeneralTree<Integer>>();
+		GeneralTree<Integer> treeAux;
+		cola.enqueue(a);
+		
+		while(!cola.isEmpty()) {
+			treeAux = cola.dequeue();
+			if((treeAux.getData() % 2 != 0) && (treeAux.getData() > n))
+				listaImpares.add(treeAux.getData());
+			for(GeneralTree<Integer> hijo: treeAux.getChildren()) {
+				cola.enqueue(hijo);
+			}
+		}
+		
+	}
     
-    */
 	
 	public static void main(String[] args) {
 		GeneralTree<Integer> a1 = new GeneralTree<Integer>(1);
@@ -127,6 +122,6 @@ public class recorridosAG {
 		
 		System.out.println(numerosImparesMayoresQuePreOrden(a,num));
 		
-		System.out.println(a.altura());
+		System.out.println(numerosImparesMayoresQuePorNiveles(a,10));
 	}	
 }
