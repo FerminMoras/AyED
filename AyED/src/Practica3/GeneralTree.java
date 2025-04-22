@@ -110,7 +110,45 @@ public class GeneralTree<T>{
 	}
 
 	public int ancho(){
-		return 0;
+		if(this.isEmpty())
+			return 0;
+		else
+			return obtenerAncho();
+	}
+	
+	private int obtenerAncho() {
+		int cant = 0;
+		int max = -1;
+		GeneralTree<T> treeAux;
+		Queue<GeneralTree<T>> cola = new Queue();
+		cola.enqueue(this);
+		cola.enqueue(null);
+		while(!cola.isEmpty()) {
+			treeAux = cola.dequeue();
+			if(treeAux != null) {
+				List<GeneralTree<T>> hijos = treeAux.getChildren();
+				for(GeneralTree<T> hijo: hijos) {
+					cola.enqueue(hijo);
+					cant++;
+				}
+			}else if(!cola.isEmpty()) {
+				max = Math.max(cant, max);
+				cant = 0;
+				cola.enqueue(null);
+			}
+		}
+		return max;
+	}
+	//PREGUNTAR COMO HACERLO.
+	public boolean esAncestro(T a, T b) {
+		if((this != null) && (this.isEmpty()))
+			return false;
+		else
+			return buscarAncestro(a,b);
+	}
+	
+	private boolean buscarAncestro(T a, T b) {
+		return false;
 	}
 	
 	public static void main(String args[]) {
