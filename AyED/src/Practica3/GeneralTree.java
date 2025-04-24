@@ -144,10 +144,35 @@ public class GeneralTree<T>{
 		if((this != null) && (this.isEmpty()))
 			return false;
 		else
-			return buscarAncestro(a,b);
+			return buscarAncestroA(a,b);
 	}
 	
-	private boolean buscarAncestro(T a, T b) {
+	private boolean buscarAncestroB(GeneralTree<T> raiz, T b) {
+		if(raiz.getData().equals(b)) {
+			return true;
+		}
+		
+		List<GeneralTree<T>> hijos = raiz.getChildren();
+		for(GeneralTree<T> hijo: hijos) {
+			if(hijo.buscarAncestroB(hijo,b))
+				return true;
+		}
+		
+		return false;
+	}
+	
+	private boolean buscarAncestroA(T a, T b) {
+		
+		if(this.getData().equals(a)) {
+			return buscarAncestroB(this, b);
+		}
+		
+		List<GeneralTree<T>> hijos = this.getChildren();
+		for(GeneralTree<T> hijo: hijos) {
+			if (hijo.buscarAncestroA(a,b))
+					return true;
+		}
+		
 		return false;
 	}
 	
@@ -174,8 +199,7 @@ public class GeneralTree<T>{
 		nodo3.addChild(nodo30);
 		nodo3.addChild(nodo31);
 		
-		System.out.println("El nivel del nodo 21 es: " + nodo0.nivel(7));
-		
+		System.out.println(nodo0.esAncestro(3,31));
 		
 	}
 }
