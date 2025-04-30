@@ -1,4 +1,5 @@
 package Practica1;
+
 import java.util.*;
 
 public class Queue<T> extends Sequence {
